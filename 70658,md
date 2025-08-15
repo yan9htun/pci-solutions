@@ -1,0 +1,82 @@
+# SSH Server CBC Mode Ciphers Enabled 
+To address the **SSH Server CBC Mode Ciphers Enabled** vulnerability identified by Nessus Plugin ID **70658**, you need to disable the use of CBC (Cipher Block Chaining) mode ciphers in your SSH configuration. CBC mode ciphers are considered less secure compared to other cipher modes, such as GCM (Galois/Counter Mode). 
+
+  
+
+## Steps to Mitigate the Vulnerability 
+
+  
+
+### 1. **Edit the SSH Configuration File** 
+
+   - Open the SSH daemon configuration file, typically located at `/etc/ssh/sshd_config`, using a text editor: 
+
+     ```bash 
+
+     sudo nano /etc/ssh/sshd_config 
+
+     ``` 
+
+   - Alternatively, you can use `vi` or any other text editor of your choice. 
+
+  
+
+### 2. **Modify the Ciphers Setting** 
+
+   - Look for the line that starts with `Ciphers`. If it does not exist, you can add it. You want to specify only secure ciphers. For example: 
+
+     ```plaintext 
+
+     Ciphers aes256-ctr,aes192-ctr,aes128-ctr 
+
+     ``` 
+
+   - This configuration disables CBC mode ciphers and enables only the more secure CTR (Counter) mode ciphers. 
+
+  
+
+### 3. **Save and Exit** 
+
+   - After making the changes, save the file and exit the text editor. In `nano`, you can do this by pressing `CTRL + X`, then `Y`, and `Enter`. 
+
+  
+
+### 4. **Restart the SSH Service** 
+
+   - For the changes to take effect, restart the SSH service: 
+
+     ```bash 
+
+     sudo systemctl restart sshd 
+
+     ``` 
+
+  
+
+### 5. **Verify the Configuration** 
+
+   - You can verify that the CBC mode ciphers are disabled by checking the SSH configuration: 
+
+     ```bash 
+
+     ssh -Q cipher 
+
+     ``` 
+
+   - This command will list the ciphers supported by your SSH client. Ensure that CBC mode ciphers (like `aes256-cbc`, `aes192-cbc`, `aes128-cbc`) are not listed. 
+
+  
+
+### 6. **Test SSH Connection** 
+
+   - After making these changes, test your SSH connection to ensure that you can still connect to the server without issues. 
+
+  
+
+### 7. **Regular Security Audits** 
+
+   - Regularly review your SSH configuration and perform security audits to ensure that your server remains secure against vulnerabilities. 
+
+  
+
+By following these steps, you can effectively mitigate the SSH Server CBC Mode Ciphers vulnerability and enhance the security of your SSH connections. 
